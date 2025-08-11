@@ -1,12 +1,10 @@
-using CheckoutKata;
-
 namespace CheckoutKataTests;
 
 [TestFixture]
 public class CheckoutTests
 {
     [Test]
-    public void Scan_WhenGivenValidStockKeepingUnit_AddsStockKeepingUnitToBasket()
+    public void Scan_WhenGivenValidStockKeepingUnitAndQuantity_AddsItemToBasket()
     {
         throw new NotImplementedException("This unit test is not yet implemented");
     }
@@ -24,7 +22,7 @@ public class CheckoutTests
     }
 
     [Test]
-    public void GetTotalPrice_CallsCalculatePrice_OnAllStockKeepingUnitsInBasket()
+    public void GetTotalPrice_CallsCalculatePrice_OnAllStockKeepingUnitsInBasket_WithCorrectQuantity()
     {
         throw new NotImplementedException("This unit test is not yet implemented");
     }
