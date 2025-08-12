@@ -1,6 +1,6 @@
-﻿using CheckoutKata.Enums;
-using CheckoutKata.Interfaces;
+﻿using CheckoutKata.Interfaces;
 using CheckoutKata.PricingStrategies;
+using CheckoutKataTests.Utils;
 using Moq;
 using System.ComponentModel;
 
@@ -9,11 +9,11 @@ namespace CheckoutKataTests.PricingStrategies;
 [TestFixture, TestOf(typeof(PricingStrategyIndex))] 
 public class PricingStrategyIndexTests
 {
-    [TestCase(StockKeepingUnit.A)]
-    [TestCase(StockKeepingUnit.B)]
-    [TestCase(StockKeepingUnit.C)]
-    [TestCase(StockKeepingUnit.D)]
-    public void SetStrategy_WhenGivenValidStockKeepingUnit_AndPricingStrategy_AddsToIndex(StockKeepingUnit sku)
+    [TestCase(TestStockItemIdentifiers.A)]
+    [TestCase(TestStockItemIdentifiers.B)]
+    [TestCase(TestStockItemIdentifiers.C)]
+    [TestCase(TestStockItemIdentifiers.D)]
+    public void SetStrategy_WhenGivenValidStockKeepingUnit_AndPricingStrategy_AddsToIndex(string sku)
     {
         var pricingStrategyIndex = new PricingStrategyIndex();
         var pricingStrategy = Mock.Of<IPricingStrategy>();
@@ -23,12 +23,14 @@ public class PricingStrategyIndexTests
         Assert.That(pricingStrategyIndex.GetStrategyForStockKeepingUnit(sku), Is.EqualTo(pricingStrategy));
     }
 
-    [Test]
-    public void SetStrategy_WhenGivenInValidStockKeepingUnit_AndPricingStrategy_ThrowsInvalidEnumArgumentException()
+    [TestCase("")]
+    [TestCase(" ")]
+    [TestCase(null)]
+    public void SetStrategy_WhenGivenInValidStockKeepingUnit_AndPricingStrategy_ThrowsInvalidEnumArgumentException(string? invalidItemIdentifier)
     {
         var pricingStrategyIndex = new PricingStrategyIndex();
         var pricingStrategy = Mock.Of<IPricingStrategy>();
 
-        Assert.That(() => pricingStrategyIndex.SetStrategy(StockKeepingUnit.INVALID, pricingStrategy), Throws.TypeOf<InvalidEnumArgumentException>());
+        Assert.That(() => pricingStrategyIndex.SetStrategy(invalidItemIdentifier, pricingStrategy), Throws.TypeOf<InvalidEnumArgumentException>());
     }
 }

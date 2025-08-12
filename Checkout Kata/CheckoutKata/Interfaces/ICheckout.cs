@@ -1,9 +1,7 @@
-﻿using CheckoutKata.Enums;
-
-namespace CheckoutKata.Interfaces;
+﻿namespace CheckoutKata.Interfaces;
 
 public interface ICheckout
 {
-    void Scan(StockKeepingUnit item);
+    void Scan(string itemIdentifier);
     int GetTotalPrice();
 }

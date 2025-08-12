@@ -1,7 +1,6 @@
 using CheckoutKata;
-using CheckoutKata.Enums;
 using CheckoutKata.Interfaces;
-using CheckoutKata.PricingStrategies;
+using CheckoutKataTests.Utils;
 using Moq;
 using System.ComponentModel;
 
@@ -26,8 +25,8 @@ public class CheckoutTests
     public void Constructor_WhenGivenNonEmptyPricingStrategyIndex_StoresTheIndexInternally()
     {
         var pricingStrategyIndexMock = new Mock<IPricingStrategyIndex>();
-        pricingStrategyIndexMock.Setup(psi => psi.GetStrategyForStockKeepingUnit(StockKeepingUnit.A)).Returns(Mock.Of<IPricingStrategy>());
-        pricingStrategyIndexMock.Setup(psi => psi.GetStrategyForStockKeepingUnit(StockKeepingUnit.B)).Returns(Mock.Of<IPricingStrategy>());
+        pricingStrategyIndexMock.Setup(psi => psi.GetStrategyForStockKeepingUnit(TestStockItemIdentifiers.A)).Returns(Mock.Of<IPricingStrategy>());
+        pricingStrategyIndexMock.Setup(psi => psi.GetStrategyForStockKeepingUnit(TestStockItemIdentifiers.B)).Returns(Mock.Of<IPricingStrategy>());
 
         var sut = new Checkout(pricingStrategyIndexMock.Object);
 
@@ -45,26 +44,26 @@ public class CheckoutTests
         Assert.That(() => sut = new Checkout(null), Throws.ArgumentNullException);
     }
 
-    [TestCase(StockKeepingUnit.A)]
-    [TestCase(StockKeepingUnit.B)]
-    [TestCase(StockKeepingUnit.C)]
-    [TestCase(StockKeepingUnit.D)]
-    public void Scan_WhenGivenValidStockKeepingUnit_AddsItemToBasket(StockKeepingUnit item)
+    [TestCase(TestStockItemIdentifiers.A)]
+    [TestCase(TestStockItemIdentifiers.B)]
+    [TestCase(TestStockItemIdentifiers.C)]
+    [TestCase(TestStockItemIdentifiers.D)]
+    public void Scan_WhenGivenValidStockKeepingUnit_AddsItemToBasket(string itemIdentifier)
     {
         var sut = new Checkout(Mock.Of<IPricingStrategyIndex>());
 
-        sut.Scan(item);
+        sut.Scan(itemIdentifier);
 
-        Assert.That(sut.ScannedItemQuantities[item], Is.EqualTo(1));
+        Assert.That(sut.ScannedItemQuantities[itemIdentifier], Is.EqualTo(1));
     }
 
     [Test]
     public void Scan_WhenGivenInvalidStockKeepingUnit_ThrowsArgumentException()
     {
         var sut = new Checkout(Mock.Of<IPricingStrategyIndex>());
-        var item = StockKeepingUnit.INVALID;
+        var invalidItemIdentifier = "";
 
-        Assert.That(() => sut.Scan(item), Throws.TypeOf<InvalidEnumArgumentException>());
+        Assert.That(() => sut.Scan(invalidItemIdentifier), Throws.TypeOf<ArgumentException>());
     }
 
     [Test]
@@ -81,14 +80,14 @@ public class CheckoutTests
         var pricingStrategyAMock = new Mock<IPricingStrategy>();
         var pricingStrategyBMock = new Mock<IPricingStrategy>();
         var pricingStrategyIndexMock = new Mock<IPricingStrategyIndex>();
-        pricingStrategyIndexMock.Setup(psi => psi.GetStrategyForStockKeepingUnit(StockKeepingUnit.A)).Returns(pricingStrategyAMock.Object);
-        pricingStrategyIndexMock.Setup(psi => psi.GetStrategyForStockKeepingUnit(StockKeepingUnit.B)).Returns(pricingStrategyBMock.Object);
+        pricingStrategyIndexMock.Setup(psi => psi.GetStrategyForStockKeepingUnit(TestStockItemIdentifiers.A)).Returns(pricingStrategyAMock.Object);
+        pricingStrategyIndexMock.Setup(psi => psi.GetStrategyForStockKeepingUnit(TestStockItemIdentifiers.B)).Returns(pricingStrategyBMock.Object);
         var sut = new Checkout(pricingStrategyIndexMock.Object);
 
         // TODO: This is a potential point of failure if the Scan method does not correctly update the ScannedItemQuantities dictionary.
         // We should probably make a way to add items to the basket without relying on a testable method like Scan.
-        sut.Scan(StockKeepingUnit.A);
-        sut.Scan(StockKeepingUnit.B);
+        sut.Scan(TestStockItemIdentifiers.A);
+        sut.Scan(TestStockItemIdentifiers.B);
 
         var _ = sut.GetTotalPrice();
 
@@ -101,7 +100,7 @@ public class CheckoutTests
     {
         var sut = new Checkout(Mock.Of<IPricingStrategyIndex>());
 
-        sut.Scan(StockKeepingUnit.A);
+        sut.Scan(TestStockItemIdentifiers.A);
 
         Assert.That(sut.GetTotalPrice, Throws.TypeOf<NullReferenceException>());
     }

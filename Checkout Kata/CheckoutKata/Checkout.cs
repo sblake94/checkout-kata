@@ -1,12 +1,10 @@
-﻿using CheckoutKata.Enums;
-using CheckoutKata.Interfaces;
-using System.ComponentModel;
+﻿using CheckoutKata.Interfaces;
 
 namespace CheckoutKata;
 
 public class Checkout : ICheckout
 {
-    public Dictionary<StockKeepingUnit, int> ScannedItemQuantities { get; } = [];
+    public Dictionary<string, int> ScannedItemQuantities { get; } = [];
     private readonly IPricingStrategyIndex _pricingStrategyIndex;
 
     public Checkout(IPricingStrategyIndex pricingStrategies)
@@ -29,11 +27,11 @@ public class Checkout : ICheckout
         return totalPrice;
     }
 
-    public void Scan(StockKeepingUnit item)
+    public void Scan(string item)
     {
-        if(item.Equals(StockKeepingUnit.INVALID))
+        if(string.IsNullOrWhiteSpace(item))
         {
-            throw new InvalidEnumArgumentException($"{nameof(item)} was {item}");
+            throw new ArgumentException($"{nameof(item)} was {item}");
         }
 
         if (!ScannedItemQuantities.TryGetValue(item, out int value))

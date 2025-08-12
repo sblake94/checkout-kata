@@ -1,5 +1,4 @@
-﻿using CheckoutKata.Enums;
-using CheckoutKata.Interfaces;
+﻿using CheckoutKata.Interfaces;
 using System.ComponentModel;
 
 namespace CheckoutKata.PricingStrategies;
@@ -9,27 +8,27 @@ namespace CheckoutKata.PricingStrategies;
 //    - DependencyInjection
 public class PricingStrategyIndex : IPricingStrategyIndex
 {
-    private readonly Dictionary<StockKeepingUnit, IPricingStrategy> _strategies;
+    private readonly Dictionary<string, IPricingStrategy> _strategies;
 
     public PricingStrategyIndex()
     {
         _strategies = [];
     }
-    public void SetStrategy(StockKeepingUnit sku, IPricingStrategy pricingStrategy)
+    public void SetStrategy(string itemIdentifier, IPricingStrategy pricingStrategy)
     {
-        if (sku == StockKeepingUnit.INVALID)
-            throw new InvalidEnumArgumentException(nameof(sku));
+        if (string.IsNullOrWhiteSpace(itemIdentifier))
+            throw new InvalidEnumArgumentException(nameof(itemIdentifier));
 
-        _strategies[sku] = pricingStrategy;
+        _strategies[itemIdentifier] = pricingStrategy;
     }
 
-    public IPricingStrategy GetStrategyForStockKeepingUnit(StockKeepingUnit sku)
+    public IPricingStrategy GetStrategyForStockKeepingUnit(string itemIdentifier)
     {
-        if (sku == StockKeepingUnit.INVALID)
-            throw new InvalidEnumArgumentException(nameof(sku));
+        if (string.IsNullOrWhiteSpace(itemIdentifier))
+            throw new InvalidEnumArgumentException(nameof(itemIdentifier));
 
-        if (!_strategies.TryGetValue(sku, out var strategy))
-            throw new KeyNotFoundException($"No pricing strategy found for SKU: {sku}");
+        if (!_strategies.TryGetValue(itemIdentifier, out var strategy))
+            throw new KeyNotFoundException($"No pricing strategy found for StockKeepingUnit: {itemIdentifier}");
 
         return strategy;
     }
