@@ -1,10 +1,12 @@
+using CheckoutKata;
+
 namespace CheckoutKataTests;
 
-[TestFixture]
+[TestFixture, TestOf(typeof(Checkout))]
 public class CheckoutTests
 {
     [Test]
-    public void Scan_WhenGivenValidStockKeepingUnitAndQuantity_AddsItemToBasket()
+    public void Scan_WhenGivenValidStockKeepingUnit_AddsItemToBasket()
     {
         throw new NotImplementedException("This unit test is not yet implemented");
     }
