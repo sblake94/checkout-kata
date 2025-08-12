@@ -2,6 +2,7 @@
 
 public enum StockKeepingUnit
 {
+    INVALID,
     A,
     B, 
     C,

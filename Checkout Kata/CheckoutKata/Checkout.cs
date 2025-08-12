@@ -5,11 +5,14 @@ namespace CheckoutKata;
 
 public class Checkout : ICheckout
 {
-    public Dictionary<StockKeepingUnit, int> ScannedItemQuantities { get; }
+    public Dictionary<StockKeepingUnit, int> ScannedItemQuantities { get; } = [];
+    private readonly PricingStrategyIndex _pricingStrategyIndex;
 
     public Checkout(PricingStrategyIndex pricingStrategies)
     {
+        ArgumentNullException.ThrowIfNull(pricingStrategies);
 
+        _pricingStrategyIndex = pricingStrategies;
     }
 
     public int GetTotalPrice()
@@ -19,6 +22,16 @@ public class Checkout : ICheckout
 
     public void Scan(StockKeepingUnit item)
     {
-        throw new NotImplementedException();
+        if(item.Equals(StockKeepingUnit.INVALID))
+        {
+            throw new ArgumentException("Invalid item scanned.", nameof(item));
+        }
+
+        if (!ScannedItemQuantities.ContainsKey(item))
+        {
+            ScannedItemQuantities[item] = 0;
+        }
+
+        ScannedItemQuantities[item]++;
     }
 }

@@ -59,7 +59,7 @@ public class CheckoutTests
         var sut = new Checkout([]);
         StockKeepingUnit item = default;
 
-        Assert.That(() => sut.Scan(item), Throws.ArgumentNullException);
+        Assert.That(() => sut.Scan(item), Throws.ArgumentException);
     }
 
     [Test]
