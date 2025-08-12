@@ -16,7 +16,7 @@ public class RegularPricingStrategyTests
     [Test]
     public void CalculatePrice_WhenCalledWithItems_ReturnsUnitCostMultipliedByUnitQuantity([Range(minUnitCost, maxUnitCost)]int unitCost, [Range(minUnitQuantity, maxUnitQuantity)] int unitQuantity)
     {
-        var sut = new RegularPricingStrategy();
+        var sut = new RegularPricingStrategy(unitCost);
         var expectedPrice = unitQuantity * unitCost; // Assuming each item costs 10
 
         var actualPrice = sut.CalculatePrice(unitQuantity);

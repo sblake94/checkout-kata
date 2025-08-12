@@ -4,8 +4,12 @@ namespace CheckoutKata.PricingStrategies;
 
 public class RegularPricingStrategy : IPricingStrategy
 {
-    public int CalculatePrice(int quantity)
+    readonly int _unitPrice;
+
+    public RegularPricingStrategy(int unitPrice)
     {
-        throw new NotImplementedException();
+        _unitPrice = unitPrice;
     }
+
+    public int CalculatePrice(int quantity) => _unitPrice * quantity;
 }
