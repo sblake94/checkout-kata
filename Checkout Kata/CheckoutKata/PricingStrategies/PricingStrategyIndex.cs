@@ -14,6 +14,7 @@ public class PricingStrategyIndex : IPricingStrategyIndex
     {
         _strategies = [];
     }
+
     public void SetStrategy(string itemIdentifier, IPricingStrategy pricingStrategy)
     {
         if (string.IsNullOrWhiteSpace(itemIdentifier))
@@ -22,7 +23,7 @@ public class PricingStrategyIndex : IPricingStrategyIndex
         _strategies[itemIdentifier] = pricingStrategy;
     }
 
-    public IPricingStrategy GetStrategyForStockKeepingUnit(string itemIdentifier)
+    public IPricingStrategy GetStrategyForItem(string itemIdentifier)
     {
         if (string.IsNullOrWhiteSpace(itemIdentifier))
             throw new InvalidEnumArgumentException(nameof(itemIdentifier));

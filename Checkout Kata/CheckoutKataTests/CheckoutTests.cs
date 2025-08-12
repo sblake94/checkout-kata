@@ -25,8 +25,8 @@ public class CheckoutTests
     public void Constructor_WhenGivenNonEmptyPricingStrategyIndex_StoresTheIndexInternally()
     {
         var pricingStrategyIndexMock = new Mock<IPricingStrategyIndex>();
-        pricingStrategyIndexMock.Setup(psi => psi.GetStrategyForStockKeepingUnit(TestStockItemIdentifiers.A)).Returns(Mock.Of<IPricingStrategy>());
-        pricingStrategyIndexMock.Setup(psi => psi.GetStrategyForStockKeepingUnit(TestStockItemIdentifiers.B)).Returns(Mock.Of<IPricingStrategy>());
+        pricingStrategyIndexMock.Setup(psi => psi.GetStrategyForItem(TestStockItemIdentifiers.A)).Returns(Mock.Of<IPricingStrategy>());
+        pricingStrategyIndexMock.Setup(psi => psi.GetStrategyForItem(TestStockItemIdentifiers.B)).Returns(Mock.Of<IPricingStrategy>());
 
         var sut = new Checkout(pricingStrategyIndexMock.Object);
 
@@ -80,8 +80,8 @@ public class CheckoutTests
         var pricingStrategyAMock = new Mock<IPricingStrategy>();
         var pricingStrategyBMock = new Mock<IPricingStrategy>();
         var pricingStrategyIndexMock = new Mock<IPricingStrategyIndex>();
-        pricingStrategyIndexMock.Setup(psi => psi.GetStrategyForStockKeepingUnit(TestStockItemIdentifiers.A)).Returns(pricingStrategyAMock.Object);
-        pricingStrategyIndexMock.Setup(psi => psi.GetStrategyForStockKeepingUnit(TestStockItemIdentifiers.B)).Returns(pricingStrategyBMock.Object);
+        pricingStrategyIndexMock.Setup(psi => psi.GetStrategyForItem(TestStockItemIdentifiers.A)).Returns(pricingStrategyAMock.Object);
+        pricingStrategyIndexMock.Setup(psi => psi.GetStrategyForItem(TestStockItemIdentifiers.B)).Returns(pricingStrategyBMock.Object);
         var sut = new Checkout(pricingStrategyIndexMock.Object);
 
         // TODO: This is a potential point of failure if the Scan method does not correctly update the ScannedItemQuantities dictionary.

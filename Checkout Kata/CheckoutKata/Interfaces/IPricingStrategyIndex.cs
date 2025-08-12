@@ -3,6 +3,6 @@ namespace CheckoutKata.Interfaces;
 
 public interface IPricingStrategyIndex
 {
-    IPricingStrategy GetStrategyForStockKeepingUnit(string itemIdentifier);
+    IPricingStrategy GetStrategyForItem(string itemIdentifier);
     void SetStrategy(string itemIdentifier, IPricingStrategy pricingStrategy);
 }

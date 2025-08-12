@@ -20,7 +20,7 @@ public class PricingStrategyIndexTests
 
         pricingStrategyIndex.SetStrategy(sku, pricingStrategy);
 
-        Assert.That(pricingStrategyIndex.GetStrategyForStockKeepingUnit(sku), Is.EqualTo(pricingStrategy));
+        Assert.That(pricingStrategyIndex.GetStrategyForItem(sku), Is.EqualTo(pricingStrategy));
     }
 
     [TestCase("")]

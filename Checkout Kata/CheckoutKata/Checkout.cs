@@ -19,7 +19,7 @@ public class Checkout : ICheckout
         int totalPrice = 0;
         foreach (var itemTypeAndQuantity in ScannedItemQuantities)
         {
-            var pricingStrategy = _pricingStrategyIndex.GetStrategyForStockKeepingUnit(itemTypeAndQuantity.Key);
+            var pricingStrategy = _pricingStrategyIndex.GetStrategyForItem(itemTypeAndQuantity.Key);
 
             totalPrice += pricingStrategy.CalculatePrice(itemTypeAndQuantity.Value);
         }
