@@ -2,14 +2,7 @@
 
 namespace CheckoutKata.PricingStrategies;
 
-public class RegularPricingStrategy : IPricingStrategy
+public class RegularPricingStrategy(int unitPrice) : IPricingStrategy
 {
-    readonly int _unitPrice;
-
-    public RegularPricingStrategy(int unitPrice)
-    {
-        _unitPrice = unitPrice;
-    }
-
-    public int CalculatePrice(int quantity) => _unitPrice * quantity;
+    public int CalculatePrice(int quantity) => unitPrice * quantity;
 }

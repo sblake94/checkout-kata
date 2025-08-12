@@ -1,14 +1,15 @@
 ﻿using CheckoutKata.Enums;
 using CheckoutKata.Interfaces;
+using System.ComponentModel;
 
 namespace CheckoutKata;
 
 public class Checkout : ICheckout
 {
     public Dictionary<StockKeepingUnit, int> ScannedItemQuantities { get; } = [];
-    private readonly PricingStrategyIndex _pricingStrategyIndex;
+    private readonly IPricingStrategyIndex _pricingStrategyIndex;
 
-    public Checkout(PricingStrategyIndex pricingStrategies)
+    public Checkout(IPricingStrategyIndex pricingStrategies)
     {
         ArgumentNullException.ThrowIfNull(pricingStrategies);
 
@@ -20,8 +21,7 @@ public class Checkout : ICheckout
         int totalPrice = 0;
         foreach (var itemTypeAndQuantity in ScannedItemQuantities)
         {
-            if (!_pricingStrategyIndex.TryGetValue(itemTypeAndQuantity.Key, out IPricingStrategy pricingStrategy)) 
-                throw new InvalidOperationException($"Pricing Strategy not found for {itemTypeAndQuantity.Key}");
+            var pricingStrategy = _pricingStrategyIndex.GetStrategyForStockKeepingUnit(itemTypeAndQuantity.Key);
 
             totalPrice += pricingStrategy.CalculatePrice(itemTypeAndQuantity.Value);
         }
@@ -33,14 +33,15 @@ public class Checkout : ICheckout
     {
         if(item.Equals(StockKeepingUnit.INVALID))
         {
-            throw new ArgumentException("Invalid item scanned.", nameof(item));
+            throw new InvalidEnumArgumentException($"{nameof(item)} was {item}");
         }
 
-        if (!ScannedItemQuantities.ContainsKey(item))
+        if (!ScannedItemQuantities.TryGetValue(item, out int value))
         {
-            ScannedItemQuantities[item] = 0;
+            value = 0;
+            ScannedItemQuantities[item] = value;
         }
 
-        ScannedItemQuantities[item]++;
+        ScannedItemQuantities[item] = ++value;
     }
 }
