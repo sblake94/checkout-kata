@@ -17,7 +17,16 @@ public class Checkout : ICheckout
 
     public int GetTotalPrice()
     {
-        throw new NotImplementedException();
+        int totalPrice = 0;
+        foreach (var itemTypeAndQuantity in ScannedItemQuantities)
+        {
+            if (!_pricingStrategyIndex.TryGetValue(itemTypeAndQuantity.Key, out IPricingStrategy pricingStrategy)) 
+                throw new InvalidOperationException($"Pricing Strategy not found for {itemTypeAndQuantity.Key}");
+
+            totalPrice += pricingStrategy.CalculatePrice(itemTypeAndQuantity.Value);
+        }
+
+        return totalPrice;
     }
 
     public void Scan(StockKeepingUnit item)

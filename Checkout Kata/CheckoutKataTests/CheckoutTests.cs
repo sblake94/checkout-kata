@@ -43,8 +43,11 @@ public class CheckoutTests
         Assert.That(() => sut = new Checkout(null), Throws.ArgumentNullException);
     }
 
-    [Test]
-    public void Scan_WhenGivenValidStockKeepingUnit_AddsItemToBasket([Values]StockKeepingUnit item)
+    [TestCase(StockKeepingUnit.A)]
+    [TestCase(StockKeepingUnit.B)]
+    [TestCase(StockKeepingUnit.C)]
+    [TestCase(StockKeepingUnit.D)]
+    public void Scan_WhenGivenValidStockKeepingUnit_AddsItemToBasket(StockKeepingUnit item)
     {
         var sut = new Checkout([]);
 
@@ -53,11 +56,10 @@ public class CheckoutTests
         Assert.That(sut.ScannedItemQuantities[item], Is.EqualTo(1));
     }
 
-    [Test]
-    public void Scan_WhenGivenNullStockKeepingUnit_ThrowsArgumentException()
+    [TestCase(StockKeepingUnit.INVALID)]
+    public void Scan_WhenGivenInvalidStockKeepingUnit_ThrowsArgumentException(StockKeepingUnit item)
     {
         var sut = new Checkout([]);
-        StockKeepingUnit item = default;
 
         Assert.That(() => sut.Scan(item), Throws.ArgumentException);
     }
@@ -91,5 +93,15 @@ public class CheckoutTests
 
         pricingStrategyA.Verify(ps => ps.CalculatePrice(1), Times.Once, "The pricing strategy for StockKeepingUnit A should be called with the correct quantity.");
         pricingStrategyB.Verify(ps => ps.CalculatePrice(1), Times.Once, "The pricing strategy for StockKeepingUnit B should be called with the correct quantity.");
+    }
+
+    [Test]
+    public void GetTotalPrice_WhenCalledWithItemsThatDoNotHavePricingStrategy_ThrowsInvalidOperationException()
+    {
+        var sut = new Checkout([]);
+
+        sut.Scan(StockKeepingUnit.A);
+
+        Assert.That(sut.GetTotalPrice, Throws.InvalidOperationException);
     }
 }
