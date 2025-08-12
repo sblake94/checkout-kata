@@ -1,4 +1,4 @@
-﻿using CheckoutKata.Pricing_Strategies;
+﻿using CheckoutKata.PricingStrategies;
 
 namespace CheckoutKataTests.PricingStrategies;
 

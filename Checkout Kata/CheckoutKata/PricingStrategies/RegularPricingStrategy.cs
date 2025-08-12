@@ -1,6 +1,6 @@
 ﻿using CheckoutKata.Interfaces;
 
-namespace CheckoutKata.Pricing_Strategies;
+namespace CheckoutKata.PricingStrategies;
 
 public class RegularPricingStrategy : IPricingStrategy
 {
